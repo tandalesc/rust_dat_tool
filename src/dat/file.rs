@@ -24,18 +24,15 @@ impl DatFile {
     }
 
     pub fn write_tiff_images(&self, tiff_dir: String) -> Result<()> {
-        DirBuilder::new().recursive(true).create(tiff_dir.clone())?;
+        DirBuilder::new().recursive(true).create(&tiff_dir)?;
         let mut idx = 0;
+        let mut image_u16 = [0u16; 1 * IMG_HEIGHT * IMG_WIDTH];
         for mut image_u8 in self.image_data.chunks(2 * IMG_HEIGHT * IMG_WIDTH) {
-            let mut image_u16 = [0u16; 1 * IMG_HEIGHT * IMG_WIDTH];
-            image_u8
-                .read_u16_into::<LittleEndian>(&mut image_u16)
-                .unwrap();
-            let path = format!("{}/test_output_file_{}.tiff", tiff_dir.clone(), idx);
+            image_u8.read_u16_into::<LittleEndian>(&mut image_u16)?;
+            let path = format!("{}/test_output_file_{}.tiff", &tiff_dir, idx);
             let mut output_file = File::create(path)?;
             let mut tiff = TiffEncoder::new(&mut output_file).unwrap();
-            tiff.write_image::<colortype::Gray16>(IMG_WIDTH as u32, IMG_HEIGHT as u32, &image_u16)
-                .unwrap();
+            tiff.write_image::<colortype::Gray16>(IMG_WIDTH as u32, IMG_HEIGHT as u32, &image_u16).unwrap();
             idx += 1;
         }
         Ok(())

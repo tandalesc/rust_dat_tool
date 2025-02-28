@@ -9,8 +9,8 @@ fn main() -> Result<()> {
     let tiff_dir = String::from("tiff_files");
 
     let reader = DatFileReader::new(file_name)?;
-    let mut parser = DatFileParser::from_reader(reader)?;
-    let dat = parser.scan_dat_file()?;
+    let dat = DatFileParser::process(reader)?;
+
     dat.write_tiff_images(tiff_dir)?;
     dat.print_statistics();
 
