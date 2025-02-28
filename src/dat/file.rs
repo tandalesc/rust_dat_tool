@@ -32,12 +32,11 @@ impl DatFile {
                 .read_u16_into::<LittleEndian>(&mut image_u16)
                 .unwrap();
             let path = format!("{}/test_output_file_{}.tiff", tiff_dir.clone(), idx);
-            idx += 1;
-
             let mut output_file = File::create(path)?;
             let mut tiff = TiffEncoder::new(&mut output_file).unwrap();
             tiff.write_image::<colortype::Gray16>(IMG_WIDTH as u32, IMG_HEIGHT as u32, &image_u16)
                 .unwrap();
+            idx += 1;
         }
         Ok(())
     }

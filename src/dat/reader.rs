@@ -12,7 +12,7 @@ pub struct DatFileReader {
 }
 
 impl DatFileReader {
-    pub fn from_file(file_name: String) -> Result<Self> {
+    pub fn new(file_name: String) -> Result<Self> {
         let file = File::open(file_name)?;
         let reader = BufReader::new(file);
         Ok(DatFileReader { reader, pointer: 0 })
