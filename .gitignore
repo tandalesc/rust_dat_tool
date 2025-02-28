@@ -1,0 +1,4 @@
+/target
+/tiff_files
+*.dat
+.DS_Store
